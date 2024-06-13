@@ -1,0 +1,83 @@
+<x-master title="Liste d'utilisateurs">
+    <main class="content px-3 py-4"> 
+        <div class="card mb-4 border-0 shadow bg-white">
+            <div class="card-header border-0 text-dark bg-white py-1 rounded-0 shadow-sm mb-3">
+                <div class="d-flex justify-content-between my-1">
+                    <a href="{{ route('tasks.index') }}" class="link-secondary link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                        <i class="fas fa-table me-1"></i>
+                        Liste d'utilisateurs
+                    </a>
+                
+                    <a class="btn text-white me-2 px-2 py-1 rounded-1"  style="background-color: #B46F55;" href="{{ route('users.create') }}">
+                        <i class="fas fa-plus-square"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-center">
+                <form action="{{ route('users.index') }}" method="GET">
+                    <div class="btn-group">
+                        <button type="submit" class="btn {{ request('role') === null ? 'btn-primary' : 'btn-light' }}" name="role" value="">Tous</button>
+                        <button type="submit" class="btn {{ request('role') === 'fonctionnaire' ? 'btn-primary' : 'btn-light' }}" name="role" value="fonctionnaire">Fonctionnaires</button>
+                        <button type="submit" class="btn {{ request('role') === 'chef' ? 'btn-primary' : 'btn-light' }}" name="role" value="chef">Chefs des services</button>
+                        <button type="submit" class="btn {{ request('role') === 'directeur' ? 'btn-primary' : 'btn-light' }}" name="role" value="directeur">Directeurs</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-body">
+                <div class="card mb-4 border-0 shadow bg-white" style="width:90%">
+                    <div class="card-header border-0 bg-white p-3 shadow-sm bg-light rounded-0">
+                    
+                    </div>
+                    <div class="card-body">
+                        <div style="overflow-x: auto; ">
+                            <table class="table table-responsive-md table-bordered text-center">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nom d'utilisateur</th>
+                                        <th>Service</th>
+                                        <th>Rôle</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $i = 0;
+                                    @endphp
+                                    @foreach ($users as $user )
+                                    <tr>
+                                        <td>{{ ++$i }} </td>
+                                        <td>{{ $user->name.' '.$user->prenom }}</td>
+                                        <td>
+                                        @if ($user->role === 'chef' || $user->role === 'fonctionnaire')
+                                            {{ $user->service->name }}
+                                        @else
+                                            <i class="fas fa-times-circle fs-2" style="color:lightgray;"></i>
+                                        @endif
+                                        </td>
+                                        <td>{{ $user->role }}</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a class="btn btn-info px-3 text-black-50" href="{{ route('users.show', $user->id) }}">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a class="btn btn-primary px-3" href="{{ route('users.edit', $user->id) }}">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a class="btn bg-danger px-3 text-white" href="{{ route('users.delete', $user->id) }}">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</x-master>
